@@ -34,6 +34,44 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Install pinned Android build tools
+        if: steps.version.outputs.needed == 'true'
+        run: |
+          sdk_dir="$RUNNER_TEMP/gridlens-android-sdk"
+          cli_archive="$RUNNER_TEMP/gridlens-commandlinetools.zip"
+          mkdir -p "$sdk_dir/cmdline-tools" "$sdk_dir/bootstrap"
+          curl --fail --location --retry 3 --retry-all-errors --connect-timeout 30 --max-time 300 \
+            'https://dl.google.com/android/repository/commandlinetools-linux-16111833_latest.zip' \
+            --output "$cli_archive"
+          test "$(stat --format=%s "$cli_archive")" = '181052239'
+          # Size and SHA-1 are pinned from Google's repository2-1.xml archive record.
+          printf 'e025545c62a8e64c7559119566a569fb1dec5f60  %s\n' "$cli_archive" | sha1sum --check --status
+          unzip -q "$cli_archive" -d "$sdk_dir/bootstrap"
+          mv "$sdk_dir/bootstrap/cmdline-tools" "$sdk_dir/cmdline-tools/latest"
+          rmdir "$sdk_dir/bootstrap"
+          rm "$cli_archive"
+          export ANDROID_HOME="$sdk_dir"
+          export ANDROID_SDK_ROOT="$sdk_dir"
+          printf 'ANDROID_HOME=%s\nANDROID_SDK_ROOT=%s\n' "$sdk_dir" "$sdk_dir" >> "$GITHUB_ENV"
+          printf '%s\n' "$sdk_dir/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          # Use an absolute path: hosted runner images do not guarantee sdkmanager on PATH.
+          # Bounded input also avoids a yes|sdkmanager SIGPIPE failure under bash pipefail.
+          python3 - <<'PY'
+          import os
+          import subprocess
+          root = os.environ['ANDROID_HOME']
+          manager = os.path.join(root, 'cmdline-tools', 'latest', 'bin', 'sdkmanager')
+          subprocess.run([manager, '--sdk_root=' + root, '--licenses'], input='y\n' * 100,
+                         text=True, check=True)
+          subprocess.run([manager, '--sdk_root=' + root, 'platforms;android-35',
+                          'build-tools;35.0.0', 'ndk;27.3.13750724', 'cmake;3.22.1'],
+                         input='y\n' * 100, text=True, check=True)
+          PY
+          test -f "$sdk_dir/platforms/android-35/android.jar"
+          test -x "$sdk_dir/build-tools/35.0.0/apksigner"
+          test -x "$sdk_dir/build-tools/35.0.0/zipalign"
+          test -f "$sdk_dir/ndk/27.3.13750724/source.properties"
+          test -x "$sdk_dir/cmake/3.22.1/bin/cmake"
       - name: Install dependencies
         if: steps.version.outputs.needed == 'true'
         run: |
@@ -47,9 +85,7 @@ jobs:
         run: npm run check
       - name: Prepare verified Android runtime
         if: steps.version.outputs.needed == 'true'
-        run: |
-          node tools/prepare-native.ts
-          sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.3.13750724' 'cmake;3.22.1'
+        run: node tools/prepare-native.ts
       - name: Build and sign
         if: steps.version.outputs.needed == 'true'
         env:
