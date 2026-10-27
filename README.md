@@ -22,8 +22,17 @@ Do not uninstall first: uninstalling removes app-local data.
 
 The app checks the APK hash, size, application ID, version and signing identity
 before opening Android's installer. There is no GitHub login or token in the app.
-It checks only when you press Update. GitHub, the internet and upstream public
-data services must be reachable; cached/unknown readings are not live proof.
+Current versions check on opening/resuming and every five minutes while the app
+is in the foreground. **Update** also checks manually; provider-requested waits
+still apply. Downloads and installation require your action. GitHub, the internet
+and upstream public data services must be reachable; cached/unknown readings are
+not live proof.
+
+Android **0.2.8** removes reward clocks while keeping all known reward amounts dark
+green. Verified PC IPs are delivered before slower rewards/GPU work, and separate
+deliveries prevent malformed GPU reports from rejecting valid IPs or rewards.
+Public-only PCs show **public IP / −**; shared NAT addresses and complete IPv6
+remain supported. Saved approvals, lookup intervals and provider waits are unchanged.
 
 ## Development and releases
 
