@@ -28,16 +28,16 @@ still apply. Downloads and installation require your action. GitHub, the interne
 and upstream public data services must be reachable; cached/unknown readings are
 not live proof.
 
-Android **0.2.11** adds a direct IP check and repairs SSH key selection. Tap the
-PC’s IP value, then **Check / repair this PC’s IP**. The native screen verifies the
-saved SSH connection and uses host curl without inspecting containers. Missing or
-paused PC-IP approval requires native confirmation and verification of the saved
-key; node monitoring and wallet permissions remain separate.
+Android **0.2.12** includes automatic PC IP collection in normal discovery.
+Choose **Inspect + automatic IP** on the native review screen. After verification
+and saving, the selected remembered SSH credentials keep PC IPs current while the
+fleet is open. No separate IP repair or rewards/GPU setup is needed for new PCs.
 
-When a server offers multiple SSH key types, GridLens now prefers the type of its
-existing pinned key. Actual key replacement still fails verification. Cache source
-times, provider waits and credential-denial controls remain intact. No container
-renaming or host installation is required. The six-mode IP toggle is unchanged.
+**Inspect only** remains available, and credentials left unremembered stay
+ephemeral. Existing monitoring, manual pauses, revocations, credential/identity
+restrictions and provider waits are preserved. The save result identifies excluded
+PCs. The direct repair action and SSH pin-selection correction from 0.2.11 remain
+available for explicit recovery of restricted or legacy connections.
 
 ## Development and releases
 
