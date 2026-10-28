@@ -28,15 +28,16 @@ still apply. Downloads and installation require your action. GitHub, the interne
 and upstream public data services must be reachable; cached/unknown readings are
 not live proof.
 
-Android **0.2.10** repairs blank PC IP readings caused by saved node state or a
-missing received cache record. PC IP checks use their own validated connection
-state, independently of node bindings and optional sudo information. Cached IP
-redelivery preserves the original measurement and provider waits. Explicit
-PC-only monitoring approval remains available when node bindings cannot be
-verified. Existing credentials, identity checks, manual pauses and denials remain
-intact; no container renaming or host installation is required.
+Android **0.2.11** adds a direct IP check and repairs SSH key selection. Tap the
+PC’s IP value, then **Check / repair this PC’s IP**. The native screen verifies the
+saved SSH connection and uses host curl without inspecting containers. Missing or
+paused PC-IP approval requires native confirmation and verification of the saved
+key; node monitoring and wallet permissions remain separate.
 
-The six-mode IP toggle and direct host-curl collection from 0.2.9 remain included.
+When a server offers multiple SSH key types, GridLens now prefers the type of its
+existing pinned key. Actual key replacement still fails verification. Cache source
+times, provider waits and credential-denial controls remain intact. No container
+renaming or host installation is required. The six-mode IP toggle is unchanged.
 
 ## Development and releases
 
