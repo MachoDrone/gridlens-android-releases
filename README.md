@@ -28,14 +28,15 @@ still apply. Downloads and installation require your action. GitHub, the interne
 and upstream public data services must be reachable; cached/unknown readings are
 not live proof.
 
-Android **0.2.9** collects public IP directly from each approved PC using installed
-host curl, independently of Nosana containers or GPU work. IP cycles hidden →
-both full addresses → external full → external last octet → internal full →
-internal last octet. IPv4 suffixes include a leading dot; IPv6 stays complete.
-Missing addresses use **−**. Existing credentials, approvals and source timestamps
-remain intact, and bounded lookup failures are visible in IP details. Successful
-public reads keep the thirty-minute cache; failures are normally eligible after
-one minute, subject to longer provider waits. No package installation is added.
+Android **0.2.10** repairs blank PC IP readings caused by saved node state or a
+missing received cache record. PC IP checks use their own validated connection
+state, independently of node bindings and optional sudo information. Cached IP
+redelivery preserves the original measurement and provider waits. Explicit
+PC-only monitoring approval remains available when node bindings cannot be
+verified. Existing credentials, identity checks, manual pauses and denials remain
+intact; no container renaming or host installation is required.
+
+The six-mode IP toggle and direct host-curl collection from 0.2.9 remain included.
 
 ## Development and releases
 
