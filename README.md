@@ -28,11 +28,14 @@ still apply. Downloads and installation require your action. GitHub, the interne
 and upstream public data services must be reachable; cached/unknown readings are
 not live proof.
 
-Android **0.2.8** removes reward clocks while keeping all known reward amounts dark
-green. Verified PC IPs are delivered before slower rewards/GPU work, and separate
-deliveries prevent malformed GPU reports from rejecting valid IPs or rewards.
-Public-only PCs show **public IP / −**; shared NAT addresses and complete IPv6
-remain supported. Saved approvals, lookup intervals and provider waits are unchanged.
+Android **0.2.9** collects public IP directly from each approved PC using installed
+host curl, independently of Nosana containers or GPU work. IP cycles hidden →
+both full addresses → external full → external last octet → internal full →
+internal last octet. IPv4 suffixes include a leading dot; IPv6 stays complete.
+Missing addresses use **−**. Existing credentials, approvals and source timestamps
+remain intact, and bounded lookup failures are visible in IP details. Successful
+public reads keep the thirty-minute cache; failures are normally eligible after
+one minute, subject to longer provider waits. No package installation is added.
 
 ## Development and releases
 
